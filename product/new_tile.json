@@ -1,0 +1,71 @@
+{
+  "mappings": {
+    "properties": {
+      "SKU": { "type": "keyword" },
+      "Name": {
+        "type": "text",
+        "fields": {
+          "keyword": { "type": "keyword", "ignore_above": 256 }
+        }
+      },
+      "Tile/Plank Width": { "type": "keyword" },
+      "Max Tile/Plank Length": { "type": "keyword" },
+      "Tile / Plank_layout": { "type": "keyword" },
+      "Product_subtype": {
+        "type": "text",
+        "fields": {
+          "keyword": { "type": "keyword", "ignore_above": 256 }
+        }
+      },
+      "Surface_applicability": {
+        "type": "text",
+        "fields": {
+          "keyword": { "type": "keyword", "ignore_above": 256 }
+        }
+      },
+      "Link": { "type": "keyword", "index": false },
+      "Groove_size": {
+        "type": "text",
+        "fields": {
+          "keyword": { "type": "keyword", "ignore_above": 256 }
+        }
+      },
+      "Category": { "type": "keyword" },
+      "Collection": { "type": "keyword" },
+      "Species": {
+        "type": "text",
+        "fields": {
+          "keyword": { "type": "keyword", "ignore_above": 256 }
+        }
+      },
+      "Color": {
+        "type": "text",
+        "fields": {
+          "keyword": { "type": "keyword", "ignore_above": 256 }
+        }
+      },
+      "description": {
+        "type": "text",
+        "analyzer": "english", 
+        "fields": {
+          "thai": {           
+            "type": "text",
+            "analyzer": "thai"
+          },
+          "standard": {       
+            "type": "text",
+            "analyzer": "standard"
+          }
+        }
+      },
+      "style": {
+        "type": "text",
+        "fields": {
+          "keyword": { "type": "keyword", "ignore_above": 256 }
+        }
+      },
+      "image_base64": { "type": "text"},
+      "embedding": { "type": "dense_vector", "dims": 768 }
+    }
+  }
+}

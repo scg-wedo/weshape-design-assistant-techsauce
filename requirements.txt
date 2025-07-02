@@ -1,0 +1,4 @@
+elasticsearch==8.13.0
+langchain
+langchain-google-vertexai
+langchain-community

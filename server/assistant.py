@@ -28,6 +28,9 @@ import time
 import json
 from dotenv import load_dotenv
 load_dotenv()
+
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(os.environ["GOOGLE_APPLICATION_CREDENTIALS_PATH"])
+
 class QAState(StateGraph):
     question: str
     translated_question: str = None
@@ -132,7 +135,7 @@ class OpenaiAssistant:
             api_key=os.getenv("ELASTIC_API_KEY")
         )
         #TODO search message 
-        print(type(messages))
+        # print(type(messages))
         search_results = self.semantic_search_elasticsearch_langchain(es_client,messages)
         
         for hit in search_results['hits']['hits']:

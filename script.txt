@@ -1,1 +1,5 @@
 docker run -p 9200:9200 -e "ELASTIC_PASSWORD=MySecret123!" -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:8.13.0
+pip install -U langchain-elasticsearch elasticsearch langchain-community
+
+1. store texture on r2 or image_base64 format on server machine? -> texture id same as fabby's data format
+2. want to save text or image input -> save

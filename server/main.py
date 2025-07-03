@@ -3,7 +3,7 @@ import uvicorn
 from fastapi import FastAPI, File, UploadFile, HTTPException, Header, Form, Depends
 from dotenv import load_dotenv
 load_dotenv()
-from src.assistant import *
+from assistant import *
 
 DOMAIN = "0.0.0.0" #"localhost"
 PORT = int(os.environ.get("PORT"))
@@ -12,25 +12,19 @@ app = FastAPI()
 agent = OpenaiAssistant()
 
 @app.post('/assistant')
-def handle_message():
-    data = request.get_json()
-    message = data.get('message')
-    
+async def handle_message(reqest_id: str, input_text: str):
 
-    response = {'response': agent.call_assistant(message)}
+    response = {'response': agent.call_assistant(input_text)}
 
     return response
 
 @app.post('/image_assistant')
-def handle_image():
+async def handle_image(request_id: str, input_image: UploadFile=File(...)):
 
-    uploaded_file  = request.files['file']
-    
-    image_bytes = uploaded_file.read()
+    image_bytes = await input_image.read()
+    file_type = input_image.content_type
 
-    file_type = uploaded_file.mimetype
-
-    response = {'response': agent.image_assistant(image_bytes,file_type)}
+    response = {'response': agent.image_assistant(image_bytes, file_type)}
     
     return response
 

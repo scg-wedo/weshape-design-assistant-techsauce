@@ -2,3 +2,9 @@ elasticsearch==8.13.0
 langchain
 langchain-google-vertexai
 langchain-community
+langchain-openai
+langchain-elasticsearch
+langgraph
+uvicorn
+fastapi
+python-multipart

@@ -79,6 +79,7 @@ class OpenaiAssistant:
         with open(image_path, "rb") as image_file:
             base64_encoded_data = base64.b64encode(image_file.read()).decode('utf-8')
         return f"data:{mime_type};base64,{base64_encoded_data}"
+    
     def semantic_search_elasticsearch_langchain(self,es_client, query):
         query_vec = self.generate_embedding(query)
         response = es_client.search(index=os.getenv("INDEX_NAME"), body={
@@ -104,7 +105,7 @@ class OpenaiAssistant:
             }
         },
             "size": 5,
-            "_source": ["SKU","Name","Surface_applicability","description", "Color","style","Species",'image_base64']
+            "_source": ["SKU","Name","Surface_applicability","description", "Color","style","Species",'image_base64', 'image_path']
         }
         )
         # results = retriever.get_relevant_documents(query)
@@ -141,7 +142,8 @@ class OpenaiAssistant:
         for hit in search_results['hits']['hits']:
             if hit['_score'] >= 1.00:
                 print(f"{hit['_score']:.2f}")
-                self.result.append(hit['_source']['image_base64'])    
+                # self.result.append(hit['_source']['image_base64'])
+                self.result.append(hit['_source']['image_path'])       
         return  self.result
     
     @tool
@@ -250,3 +252,40 @@ class OpenaiAssistant:
                 print(f"{hit['_score']:.2f}")
                 self.result.append(hit['_source']['image_base64'])
         return  self.result
+    
+    def searching(self, es_client, text_list:list) -> list:
+        result_list = []
+        for text_input in text_list:
+            query_vec = self.generate_embedding(text_input)
+            response = es_client.search(index=INDEX_NAME, body={
+            #semantic search or vectorsearch
+            "knn": {
+                "field": "embedding",
+                "query_vector": query_vec,
+                "k": 5,
+                "num_candidates": 10,
+            },
+            #keyword search
+            "query": {
+                "multi_match": {
+                    "query": text_input,
+                    "fields": ["description", 
+                            "description.thai", 
+                            "description.standard",
+                            "style^1.1",
+                            "Color^2",
+                            "Surface_applicability",
+                            "Species^1.5"],
+                    "type": "most_fields"
+                }
+            },
+                "size": 3,
+                "_source": ["SKU","Name","Surface_applicability","description", "Color","style","Species",'image_base64', "image_path"]
+            }
+            )
+            for hit in response['hits']['hits']:
+                if hit['_score'] >= 1.00:
+                    #result depend on what you searching
+                    result_list.append(hit['_source']['SKU'])
+        return result_list
+    

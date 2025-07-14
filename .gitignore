@@ -206,7 +206,8 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-datasets/
+dataset/
+json_output/
 .env
 gcp_credentials.json
 vertexAI_credentials.json

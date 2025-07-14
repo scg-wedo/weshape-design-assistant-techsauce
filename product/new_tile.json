@@ -65,7 +65,8 @@
         }
       },
       "image_base64": { "type": "text"},
-      "embedding": { "type": "dense_vector", "dims": 768 }
+      "embedding": { "type": "dense_vector", "dims": 768 },
+      "image_path": {"type": "text"}
     }
   }
 }
